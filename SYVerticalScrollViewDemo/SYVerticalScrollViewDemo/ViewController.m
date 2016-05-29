@@ -76,7 +76,7 @@
     NSMutableArray *dataSource = [[NSMutableArray alloc] initWithObjects:@"data0",@"data1",@"data2",@"data3",@"data4",@"data5",nil];
     
     //init it
-    _simpleView = [[SYVerticalAutoScrollView alloc] init:defaultRect
+    _simpleView = [[SYVerticalAutoScrollView alloc] initWithFrame:defaultRect
                                              customViews:btns
                                        animationInterval:animationInterval
                                        animationDuration:animationDuration
@@ -107,20 +107,33 @@
     NSMutableArray *dataSource = [[NSMutableArray alloc] initWithObjects:@"data0",@"data1",@"data2",@"data3",@"data4",@"data5",nil];
     
     //init it
-    _customView = [[SYVerticalAutoScrollView alloc] init:custRect
-                                             customViews:custArr
-                                       animationInterval:animationInterval
-                                       animationDuration:animationDuration
-                                              dataSource:dataSource
-                                                 updator:^(CustomView *sender,
-                                                           NSMutableArray *data,
-                                                           int index) {
-                                                     //do your update with params
-                                                     [sender.BtnA setTitle:data[index] forState:UIControlStateNormal];
-                                                     [sender.BtnB setTitle:data[index] forState:UIControlStateNormal];
-                                                     [sender.lblA setText:@"HOT"];
-                                                     [sender.lblB setText:@"HOT"];
-                                                 }];
+//    _customView = [[SYVerticalAutoScrollView alloc] initWithFrame:custRect
+//                                             customViews:custArr
+//                                       animationInterval:animationInterval
+//                                       animationDuration:animationDuration
+//                                              dataSource:dataSource
+//                                                 updator:^(CustomView *sender,
+//                                                           NSMutableArray *data,
+//                                                           int index) {
+//                                                     //do your updates with params
+//                                                     [sender.BtnA setTitle:data[index] forState:UIControlStateNormal];
+//                                                     [sender.BtnB setTitle:data[index] forState:UIControlStateNormal];
+//                                                     [sender.lblA setText:@"HOT"];
+//                                                     [sender.lblB setText:@"HOT"];
+//                                                 }];
+    //convinience initilizer
+    _customView = [SYVerticalAutoScrollView viewWithFrame:custRect
+                                               customVies:custArr
+                                        animationInterval:animationInterval animationDuration:animationDuration dataSource:dataSource updator:^(CustomView *sender, NSMutableArray *data, int index) {
+                                            //suggesting you to change the type of sender
+                                            //do your updates with params
+                                            [sender.BtnA setTitle:data[index] forState:UIControlStateNormal];
+                                            [sender.BtnB setTitle:data[index] forState:UIControlStateNormal];
+                                            [sender.lblA setText:@"HOT"];
+                                            [sender.lblB setText:@"HOT"];
+                                        }];
+    
+    
     _customView.backgroundColor=RDMCLR;
     [self.view addSubview:_customView];
 }
@@ -145,6 +158,8 @@
 
 
 -(void) clickAction:(UIButton *) sender{
+    //wanna know which element you clicked?check the dataIndex property
+    //dataIndex 代表你所点击的是数据源中的哪个索引
     NSLog(@"you tapped the --->%d element of the dataSource",_simpleView.dataIndex);
 }
 
