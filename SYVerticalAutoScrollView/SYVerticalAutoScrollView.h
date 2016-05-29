@@ -21,17 +21,32 @@
 typedef void(^UpdateContentHandler)(id sender,NSMutableArray* data,int index);
 
 
-
-
-
 @interface SYVerticalAutoScrollView : UIView
-
-
 
 /**current index of scrolling/当前数据索引(类似于横向轮播的页码)*/
 @property(nonatomic,assign) int dataIndex;
 
 
+
+/**
+ *  convinience initilizer
+ *  便捷初始化
+ *
+ *  @param frame              frame of SYVerticalAutoScrollView/视图的位置和尺寸
+ *  @param customViews        contentViews of SYVerticalAutoScrollView/滚动视图中的子视图(自定义)
+ *  @param interval           interval of animations/动画间隔
+ *  @param duration           duration of animations/动画时长
+ *  @param dataSource         dataSource for contentViews/滚动视图的数据源
+ *  @param updateHandler      handler method for updating while the view is scrolling/自定义button的更新回调,sender为需要更新的控件,data为数据源,index为当前滚动的索引
+ *
+ *  @return 实例
+ */
++(instancetype) viewWithFrame:(CGRect) frame
+                   customVies:(NSArray *) customViews
+            animationInterval:(float) interval
+            animationDuration:(float) duration
+                   dataSource:(NSMutableArray *) dataSource
+                      updator:(UpdateContentHandler) updateHandler;
 
 /**
  *  initilizer
@@ -46,12 +61,12 @@ typedef void(^UpdateContentHandler)(id sender,NSMutableArray* data,int index);
  *
  *  @return 实例
  */
--(instancetype) init:(CGRect)frame
-         customViews:(NSArray *) customViews
-   animationInterval:(float) interval
-   animationDuration:(float) duration
-        dataSource:(NSMutableArray *) dataSource
-             updator:(UpdateContentHandler) updateHandler;
+-(instancetype) initWithFrame:(CGRect)frame
+                  customViews:(NSArray *) customViews
+            animationInterval:(float) interval
+            animationDuration:(float) duration
+                   dataSource:(NSMutableArray *) dataSource
+                      updator:(UpdateContentHandler) updateHandler;
 
 /**
  *  stop scrolling/停止滚动
