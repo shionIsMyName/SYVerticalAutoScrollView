@@ -37,6 +37,8 @@
 @property(nonatomic,assign) int scrollCount;
 //timer for scrolling/计时器
 @property (nonatomic,retain) NSTimer *timer;
+//indicates timer is running or not
+@property(nonatomic,assign) BOOL isRunning;
 
 @end
 @implementation SYVerticalAutoScrollView
@@ -107,34 +109,33 @@
 //change action
 -(void) changeAction:(id) userInfo{
     NSMutableArray *dataArr = [NSMutableArray arrayWithArray:_dataSource];
-    // justifying params/矫正参数
-    [self justifyParams:dataArr];
+    // modifying params/矫正参数
+    [self modifyParams:dataArr];
+    
     [UIView animateWithDuration:_animationDuration animations:^{
+        //change frames of contentViews
         _dsubViewOne.frame = CGRectMake(0,_dsubViewOne.frame.origin.y-HIT, _dsubViewOne.frame.size.width, _dsubViewOne.frame.size.height);
         _dsubViewTwo.frame = CGRectMake(0, _dsubViewTwo.frame.origin.y-HIT,_dsubViewTwo.frame.size.width, _dsubViewTwo.frame.size.height);
-        
     } completion:^(BOOL finished) {
-        if (finished) {
-            // once started cycling ,changing two subviews all the time/一旦进入循环 就会不断切换两个子控件的位置
-            if (_cycleScroll) {
-                if (CGRectGetMaxY(_dsubViewOne.frame)==(CGRectGetMinY(_dsubViewTwo.frame))){
-                    _dsubViewOne.frame =CGRectMake(0, CGRectGetMaxY(_dsubViewTwo.frame), WIT, HIT);
-                    self.updator(_dsubViewOne,dataArr,_scrollIndex);
-                }else{
-                    _dsubViewTwo.frame =CGRectMake(0, CGRectGetMaxY(_dsubViewOne.frame), WIT, HIT);
-                    self.updator(_dsubViewTwo,dataArr,_scrollIndex);
-                }
-                _dataIndex++;
-                _dataIndex = (_dataIndex%dataArr.count);
+        // once started cycling ,changing two subviews all the time/一旦进入循环 就会不断切换两个子控件的位置
+        if (_cycleScroll) {
+            if (CGRectGetMaxY(_dsubViewOne.frame)==(CGRectGetMinY(_dsubViewTwo.frame))){
+                _dsubViewOne.frame =CGRectMake(0, HIT, WIT, HIT);
+                self.updator(_dsubViewOne,dataArr,_scrollIndex);
+            }else{
+                _dsubViewTwo.frame =CGRectMake(0, HIT, WIT, HIT);
+                self.updator(_dsubViewTwo,dataArr,_scrollIndex);
             }
-            _scrollIndex++;
-            _scrollIndex = (_scrollIndex%dataArr.count);
+            _dataIndex++;
+            _dataIndex = (_dataIndex%dataArr.count);
         }
+        _scrollIndex++;
+        _scrollIndex = (_scrollIndex%dataArr.count);
     }];
 }
 
 
--(void) justifyParams:(NSArray *) dataArr{
+-(void) modifyParams:(NSArray *) dataArr{
     if (_scrollCount<2) {
         // when scrollCount is 2 start cycling/滚动计数到第二时 开启循环
         if (_scrollCount==1) {
@@ -173,6 +174,7 @@
         _dataIndex=0;
         _scrollCount=0;
         _cycleScroll=NO;
+        
         _timer=self.timer;
     }
 }
@@ -181,14 +183,20 @@
 
 -(void) stop{
     if (_timer) {
-        [_timer setFireDate:[NSDate distantFuture]];
+        if (_isRunning) {
+            _isRunning = NO;
+            [_timer setFireDate:[NSDate distantFuture]];
+        }
     }
 }
 
 
 -(void) run{
     if (_timer) {
-        [_timer setFireDate:[NSDate date]];
+        if (!_isRunning) {
+            _isRunning = YES;
+            [_timer setFireDate:[NSDate date]];
+        }
     }
 }
 
@@ -196,7 +204,10 @@
 -(NSTimer *) timer{
     if (!_timer) {
         _timer = [NSTimer scheduledTimerWithTimeInterval:_animationInterval target:self selector:@selector(changeAction:) userInfo:nil repeats:YES];
+        
         [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+        
+        _isRunning = YES;
     }
     return _timer;
 }
@@ -208,6 +219,7 @@
     }
     [super removeFromSuperview];
 }
+
 
 
 
