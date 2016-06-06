@@ -40,25 +40,10 @@
     [self loadCustomViewDemo];
 }
 
-//load event control btns
--(void) loadEventControlBtns{
-    for (int i=0; i<3; i++) {
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [btn setBackgroundColor:RDMCLR];
-        if (i==0) {
-            [btn setTitle:@"update" forState:UIControlStateNormal];
-        }else if(i==1){
-            [btn setTitle:@"stop" forState:UIControlStateNormal];
-        }else{
-            [btn setTitle:@"run" forState:UIControlStateNormal];
-        }
-        [btn setTag:i];
-        btn.frame = CGRectMake(100*i, self.view.center.y-50, 100, 50);
-        [btn addTarget:self action:@selector(controlAction:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:btn];
-    }
 
-}
+
+
+
 //简单的初始化
 //simpleView demo
 -(void) loadSimpleViewDemo{
@@ -91,6 +76,12 @@
     [self.view addSubview:_simpleView];
 }
 
+
+
+
+
+//自定义视图的初始化
+//customView demo
 -(void) loadCustomViewDemo{
     //prepare params
     CustomView *custViewOne = [CustomView customView];
@@ -106,21 +97,6 @@
     float animationDuration = 1;
     NSMutableArray *dataSource = [[NSMutableArray alloc] initWithObjects:@"data0",@"data1",@"data2",@"data3",@"data4",@"data5",nil];
     
-    //init it
-//    _customView = [[SYVerticalAutoScrollView alloc] initWithFrame:custRect
-//                                             customViews:custArr
-//                                       animationInterval:animationInterval
-//                                       animationDuration:animationDuration
-//                                              dataSource:dataSource
-//                                                 updator:^(CustomView *sender,
-//                                                           NSMutableArray *data,
-//                                                           int index) {
-//                                                     //do your updates with params
-//                                                     [sender.BtnA setTitle:data[index] forState:UIControlStateNormal];
-//                                                     [sender.BtnB setTitle:data[index] forState:UIControlStateNormal];
-//                                                     [sender.lblA setText:@"HOT"];
-//                                                     [sender.lblB setText:@"HOT"];
-//                                                 }];
     //convinience initilizer
     _customView = [SYVerticalAutoScrollView viewWithFrame:custRect
                                                customVies:custArr
@@ -156,6 +132,25 @@
     }
 }
 
+//load event control btns
+-(void) loadEventControlBtns{
+    for (int i=0; i<3; i++) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn setBackgroundColor:RDMCLR];
+        if (i==0) {
+            [btn setTitle:@"update" forState:UIControlStateNormal];
+        }else if(i==1){
+            [btn setTitle:@"stop" forState:UIControlStateNormal];
+        }else{
+            [btn setTitle:@"run" forState:UIControlStateNormal];
+        }
+        [btn setTag:i];
+        btn.frame = CGRectMake(100*i, self.view.center.y-50, 100, 50);
+        [btn addTarget:self action:@selector(controlAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:btn];
+    }
+    
+}
 
 -(void) clickAction:(UIButton *) sender{
     //wanna know which element you clicked?check the dataIndex property

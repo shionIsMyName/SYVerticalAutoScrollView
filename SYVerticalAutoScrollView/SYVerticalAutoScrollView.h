@@ -4,7 +4,7 @@
 //
 //  Created by shiyong on 16/5/18.
 //  Copyright © 2016年 sy. All rights reserved.
-// The core idea of this view is auto switching two views to make them look like cycling all the time,so you have give the view two subviews!!!
+// The core idea of this view is auto switching two views to make them look like cycling all the time,so you have give the view two same subviews!!!
 //
 
 #import <UIKit/UIKit.h>
